@@ -1,19 +1,29 @@
 // from data.js
 var tableData = data;
-var tbody = d3.select("tbody");
+var submit = d3.select("#filter-btn");
 
+submit.on("click", function() {
 
+  // Prevent the page from refreshing
+  d3.event.preventDefault();
 
-//Use d3 to append 1 cell per UFO report value (datetime, city, state, country, shape, durationMinutes, comments)
-data.forEach(function(UFO) {
-    console.log(UFO);
-    var row = tbody.append("tr");
+  // Select the input element and get the value property from the input element
+  var inputElement = d3.select("#datetime").property("value");
+  
+  // Filter the date based on the input element
+  var filteredData = data.filter(data => data.datetime === inputElement);
+
+  //Use d3 to append 1 cell per filtered report object
+  var tbody = d3.select("tbody");
+
+  // Iterate per value within the object
+  filteredData.forEach(function(d) {
     
-    Object.entries(UFO).forEach(function([key, value]) {
-    console.log(key, value);
     // Append a cell to the row for each value
-    // in the weather report object
-    var cell = tbody.append("td");
-    cell.text(value);    
-    });
-    });
+    var row = tbody.append("tr");
+      Object.entries(d).forEach(function([key, value]) {
+      var cell = tbody.append("td");
+      cell.text(value);    
+      });
+  });
+});
